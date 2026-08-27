@@ -1,6 +1,6 @@
 import { useState } from "react";
 import MoodCheckIn from "./components/mood/MoodCheckIn";
-import HomeScreen from "./components/home/HomeScreen";
+import HomeScreen from "./components/home/Homescreen";
 import ContinueConversation from "./components/continue/ContinueConversation";
 import MomentsScreen from "./components/moments/MomentsScreen";
 import JourneyScreen from "./components/journey/JourneyScreen";
