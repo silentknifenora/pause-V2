@@ -1,5 +1,7 @@
-import ReflectionScreen from "../ReflectionScreen";
+import ReflectionScreen from "../reflection/ReflectionScreen";
 import { useState } from "react";
+import { saveNewSession } from "../../utils/memoryStorage";
+import ProgressDots from "../common/ProgressDots";
 function EchoScreen({ mood }) {
     const [journalText, setJournalText] = useState("");
     const [showReflection, setShowReflection] = useState(false);
@@ -13,6 +15,7 @@ function EchoScreen({ mood }) {
 }
   return (
     <div className="card">
+      <ProgressDots currentStep={2} />
 
       <h2>🌸 Echo</h2>
 
@@ -32,18 +35,23 @@ function EchoScreen({ mood }) {
   placeholder="Write anything that's on your mind..."
   rows="6"
 />
+
 <p>You typed:</p>
 
 <p>{journalText}</p>
-      <button
-    className="checkin-btn"
-    onClick={() => setShowReflection(true)}
+
+<button
+  className="checkin-btn"
+  onClick={() => {
+    saveNewSession(mood, journalText);
+    setShowReflection(true);
+  }}
 >
-    Share with Echo
+  Share with Echo
 </button>
 
-    </div>
-  );
+</div>
+);
 }
 
 export default EchoScreen;

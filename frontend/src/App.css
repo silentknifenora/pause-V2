@@ -1,113 +1,694 @@
-body {
-  margin: 0;
-  background: #f8f6fc;
-  font-family: Arial, sans-serif;
-}
+/* ---------- Global reset ---------- */
 
-.app {
-  max-width: 420px;
-  margin: 40px auto;
-  padding: 20px;
-}
-
-.card {
-  background: white;
-  padding: 24px;
-  border-radius: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-}
-
-.checkin-btn {
-  width: 100%;
-  padding: 16px;
-  border: none;
-  border-radius: 14px;
-  background: #8b7fd8;
-  color: white;
-  font-size: 18px;
-  cursor: pointer;
-}
-
-.checkin-btn:hover {
-  background: #786cc8;
-}
-.mood-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
-  margin-top: 20px;
-}
-.mood-text h3{
-
-margin:0;
-
-font-size:22px;
-
-font-weight:600;
-
-}
-.mood-card {
-  display: flex;
-  align-items: center;
-
-  background: white;
-
-  border-radius: 18px;
-
-  padding: 22px;
-
-  margin-bottom: 14px;
-
-  cursor: pointer;
-
-  transition: .25s ease;
-
-  border: 2px solid transparent;
-
-  box-shadow: 0 8px 20px rgba(0,0,0,.05);
-}
-
-.mood-card:hover{
-    transform:translateY(-2px);
-}
-
-.mood-card.selected{
-
-    border-color:#8B7FD8;
-
-    background:#F4F1FF;
-
-    box-shadow:0 0 20px rgba(139,127,216,.18);
-
-}
-.mood-left{
-
-display:flex;
-
-align-items:center;
-
-gap:18px;
-
-}
-.emoji{
-
-font-size:42px;
-
-}
-textarea {
-  width: 100%;
-  min-height: 160px;
-  border: none;
-  border-radius: 16px;
-  background: #faf8ff;
-  padding: 18px;
-  font-size: 16px;
-  resize: none;
-  margin: 20px 0;
+* {
   box-sizing: border-box;
 }
 
+:root {
+  font-family: Inter, Arial, sans-serif;
+  color: #292d29;
+  background: #f4f6f1;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+
+  background:
+    radial-gradient(circle at top left, #ffffff 0%, transparent 38%),
+    linear-gradient(180deg, #f7f8f5 0%, #eef2eb 100%);
+
+  color: #292d29;
+}
+
+/* ---------- Main mobile-first layout ---------- */
+
+.app {
+  width: 100%;
+  max-width: 460px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 38px 20px 60px;
+}
+
+/* ---------- General typography ---------- */
+
+h1 {
+  margin: 0 0 24px;
+  color: #66745f;
+  font-size: 2rem;
+  letter-spacing: 0.08em;
+}
+
+h2 {
+  margin: 0 0 14px;
+  color: #292d29;
+  font-size: 1.6rem;
+  line-height: 1.25;
+}
+
+h3 {
+  margin: 0 0 10px;
+  color: #292d29;
+  font-size: 1.05rem;
+}
+
+p {
+  margin: 8px 0;
+  color: #70766f;
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+small {
+  color: #92988f;
+  font-size: 0.8rem;
+}
+
+/* ---------- Main cards ---------- */
+
+.card {
+  display: block;
+  width: 100%;
+  margin-bottom: 18px;
+  padding: 26px;
+  overflow: hidden;
+
+  color: #292d29;
+  font: inherit;
+  text-align: left;
+
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid #e1e5de;
+  border-radius: 24px;
+
+  box-shadow:
+    0 16px 42px rgba(55, 70, 52, 0.07),
+    0 2px 8px rgba(55, 70, 52, 0.03);
+
+  animation: fade-in 0.35s ease both;
+}
+
+/* Clickable InfoCard buttons */
+
+button.card {
+  appearance: none;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+button.card:hover {
+  transform: translateY(-3px);
+  border-color: #cdd6c9;
+  box-shadow:
+    0 20px 46px rgba(55, 70, 52, 0.10),
+    0 3px 10px rgba(55, 70, 52, 0.04);
+}
+
+button.card:active {
+  transform: translateY(-1px);
+}
+
+/* ---------- Main action button ---------- */
+
+.checkin-btn {
+  width: 100%;
+  margin-top: 18px;
+  padding: 16px 20px;
+
+  color: #ffffff;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+
+  background: #7d9178;
+  border: none;
+  border-radius: 18px;
+
+  box-shadow: 0 8px 18px rgba(91, 112, 86, 0.16);
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.checkin-btn:hover {
+  background: #6f846a;
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 12px 24px rgba(91, 112, 86, 0.2);
+}
+
+.checkin-btn:active {
+  transform: translateY(0);
+}
+
+.checkin-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ---------- Mood selection ---------- */
+
+.mood-card {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 13px;
+  padding: 19px 20px;
+
+  background: #fbfcfa;
+  border: 2px solid transparent;
+  border-radius: 18px;
+
+  box-shadow: 0 7px 18px rgba(55, 70, 52, 0.05);
+
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.mood-card.selected {
+  background: #edf2ea;
+  border-color: #8fa088;
+  box-shadow: 0 10px 24px rgba(91, 112, 86, 0.12);
+}
+
+.mood-card:hover {
+  transform: translateY(-2px);
+  background: #f5f7f3;
+}
+
+.mood-left {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.emoji {
+  flex-shrink: 0;
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.mood-text h3 {
+  margin: 0;
+  font-size: 1.08rem;
+  font-weight: 700;
+}
+
+/* ---------- Text area ---------- */
+
+textarea {
+  width: 100%;
+  min-height: 150px;
+  margin: 18px 0 4px;
+  padding: 17px;
+
+  color: #292d29;
+  font: inherit;
+  font-size: 1rem;
+  line-height: 1.55;
+
+  background: #f7f9f5;
+  border: 1px solid #e1e5de;
+  border-radius: 16px;
+
+  resize: vertical;
+}
+
 textarea:focus {
-  outline: 2px solid #8B7FD8;
+  outline: none;
+  border-color: #8fa088;
+  box-shadow: 0 0 0 4px rgba(125, 145, 120, 0.12);
+}
+
+textarea::placeholder {
+  color: #969d94;
+}
+
+/* ---------- Echo and reflection sections ---------- */
+
+.reflection-box,
+.echo-response,
+.memory-card {
+  margin-top: 18px;
+  padding: 18px;
+
+  background: #f7f9f5;
+  border: 1px solid #e1e5de;
+  border-radius: 16px;
+}
+
+.echo-response {
+  background: #f3f6f1;
+  border: 1px solid #e1e5de;
+  border-left: 3px solid #9aaa94;
+}
+
+.reflection-box p,
+.echo-response p,
+.memory-card p {
+  margin-bottom: 0;
+  white-space: pre-wrap;
+}
+
+.memory-card {
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.memory-card:hover {
+  transform: translateY(-2px);
+  border-color: #ccd5c8;
+}
+
+/* ---------- Dividers ---------- */
+
+hr {
+  height: 1px;
+  margin: 26px 0;
+  background: #e3e7e0;
+  border: none;
+}
+
+/* ---------- Entry animation ---------- */
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- Smaller phones ---------- */
+
+@media (max-width: 440px) {
+  .app {
+    padding: 22px 14px 44px;
+  }
+
+  .card {
+    padding: 22px;
+    border-radius: 21px;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+  }
+
+  .emoji {
+    font-size: 2.2rem;
+  }
+}
+/* ---------- Home Cards ---------- */
+
+.info-card {
+  min-height: 118px;
+  padding: 22px 26px;
+  text-align: left;
+  overflow: visible;
+}
+
+.info-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.info-card-top h3 {
+  margin: 0;
+}
+
+.info-card p {
+  display: block;
+  margin: 10px 0 0;
+  color: #70766f;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+.info-card-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.info-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #74816f;
+}
+
+.info-icon svg {
+  display: block;
+  width: 18px;
+  height: 18px;
+}
+
+.arrow {
+  flex-shrink: 0;
+  color: #929b90;
+  font-size: 22px;
+  transition: transform 0.25s ease;
+}
+
+.info-card:hover .arrow {
+  transform: translateX(5px);
+}
+.screen-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 14px;
+  color: #292d29;
+}
+
+.screen-title svg {
+  color: #74816f;
+}
+
+.screen-subtitle {
+  margin-bottom: 26px;
+  color: #70766f;
+}
+/* ---------- Journey ---------- */
+
+
+.journey-subtitle {
+  margin-bottom: 28px;
+}
+
+.journey-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.journey-entry {
+  padding: 20px 0;
+  border-bottom: 1px solid #e3e7e0;
+}
+
+.journey-entry:last-child {
+  border-bottom: none;
+}
+
+.journey-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.journey-mood {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #292d29;
+}
+
+.journey-mood span {
+  font-size: 1.3rem;
+}
+
+.journey-journal {
+  margin-top: 12px;
+  color: #70766f;
+}
+
+.minimal-back-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 7px;
+
+  margin: 0 0 26px;
+  padding: 0;
+
+  color: #70766f;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+
+  background: transparent;
+  border: none;
+
+  cursor: pointer;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.minimal-back-btn svg {
+  flex-shrink: 0;
+}
+
+.minimal-back-btn:hover {
+  color: #4f5d4b;
+  transform: translateX(-2px);
+}
+
+.screen-heading {
+  margin: 0 0 14px;
+}
+
+.empty-state {
+  margin-top: 24px;
+  padding: 22px;
+
+  background: #f7f9f5;
+  border: 1px solid #e1e5de;
+  border-radius: 16px;
+}
+.screen-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.progress-dots {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 22px;
+}
+
+.progress-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #dfe4dc;
+}
+
+.progress-dot.active {
+  background: #7d9178;
+}
+/* ---------- Breathing Pause ---------- */
+
+.breathing-screen {
+  text-align: center;
+}
+
+.breathing-circle {
+  width: 150px;
+  height: 150px;
+  margin: 48px auto 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #edf2ea;
+  border: 1px solid #d7dfd3;
+
+  color: #4f5d4b;
+  font-weight: 600;
+
+  transition:
+    transform 4s ease-in-out,
+    background 0.5s ease;
+}
+
+.breathing-circle.inhale {
+  transform: scale(1.35);
+  background: #e7eee3;
+}
+
+.breathing-circle.exhale {
+  transform: scale(0.9);
+  background: #f4f6f1;
+}
+
+.breathing-note {
+  color: #92988f;
+  font-size: 0.9rem;
+}
+.info-card-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.info-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  color: #74816f;
+}
+
+.info-icon svg {
+  display: block;
+  width: 18px;
+  height: 18px;
+}
+.breathing-time {
+  margin-top: 8px;
+  color: #70766f;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+/* ---------- Breathing Home Feature ---------- */
+
+.breathing-home-card {
+  position: relative;
+
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  align-items: center;
+  gap: 18px;
+
+  width: 100%;
+  margin-top: 30px;
+  padding: 24px;
+
+  background: #eef3eb;
+  border: 1px solid #d9e2d5;
+  border-radius: 24px;
+
+  box-shadow: 0 12px 30px rgba(55, 70, 52, 0.06);
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.breathing-home-card:hover {
+  transform: translateY(-3px);
+  border-color: #bdcbb7;
+
+  box-shadow:
+    0 16px 34px rgba(55, 70, 52, 0.1);
+}
+
+.breathing-mini-visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 62px;
+  height: 62px;
+
+  background: #f8faf6;
+  border-radius: 50%;
+}
+
+.breathing-mini-circle {
+  width: 26px;
+  height: 26px;
+
+  border: 2px solid #7d9178;
+  border-radius: 50%;
+
+  animation: mini-breathe 4s ease-in-out infinite alternate;
+}
+
+@keyframes mini-breathe {
+  from {
+    transform: scale(0.75);
+    opacity: 0.65;
+  }
+
+  to {
+    transform: scale(1.25);
+    opacity: 1;
+  }
+}
+
+.breathing-home-content h3 {
+  margin: 3px 0 4px;
+}
+
+.breathing-home-content p {
+  margin: 0;
+
+  color: #70766f;
+  font-size: 0.95rem;
+}
+
+.breathing-label {
+  color: #7d9178;
+
+  font-size: 0.68rem;
+  font-weight: 700;
+
+  letter-spacing: 0.12em;
+}
+
+.breathing-arrow {
+  color: #82907e;
+  font-size: 22px;
+
+  transition: transform 0.2s ease;
+}
+
+.breathing-home-card:hover .breathing-arrow {
+  transform: translateX(4px);
+}
+
+@media (max-width: 440px) {
+  .breathing-home-card {
+    grid-template-columns: 54px 1fr auto;
+    gap: 14px;
+
+    padding: 20px;
+  }
+
+  .breathing-mini-visual {
+    width: 52px;
+    height: 52px;
+  }
 }

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import MoodCard from "./MoodCard";
 import EchoScreen from "../echo/EchoScreen";
+import ProgressDots from "../common/ProgressDots";
 
 function MoodCheckIn() {
   const [selectedMood, setSelectedMood] = useState("");
@@ -11,6 +12,7 @@ if (showEcho) {
 }
   return (
     <div className="card">
+      <ProgressDots currentStep={1} />
 
       <h2>How are you arriving today?</h2>
 

@@ -1,33 +1,18 @@
 const echoResponses = {
-  Happy: [
-    "I'm so glad you shared that. Hold onto this feeling—it matters.",
-    "Moments like these deserve to be remembered.",
-    "It's wonderful to see you celebrating something positive."
-  ],
+  Happy:
+    "🌸 I'm really glad today had some light in it. I hope you take a moment to celebrate whatever made you smile.",
 
-  Calm: [
-    "Peaceful moments are valuable. Thank you for noticing this one.",
-    "Sometimes calm is exactly what we need.",
-    "I'm glad you gave yourself this moment."
-  ],
+  Calm:
+    "🌿 It sounds like today brought you a little peace. Those quiet moments are worth protecting.",
 
-  Okay: [
-    "It's perfectly okay to have an ordinary day.",
-    "Not every day has to be extraordinary.",
-    "Thank you for checking in with yourself."
-  ],
+  Okay:
+    "🌼 Not every day has to be extraordinary. Sometimes simply getting through the day is enough.",
 
-  Sad: [
-    "Thank you for trusting me with your feelings.",
-    "You don't have to carry everything alone.",
-    "Tomorrow doesn't have to look like today."
-  ],
+  Sad:
+    "💙 I'm sorry today feels heavy. Thank you for sharing it instead of carrying it alone.",
 
-  Anxious: [
-    "Take one slow breath.",
-    "You don't have to solve everything today.",
-    "We'll take this one step at a time."
-  ]
+  Anxious:
+    "🌸 It sounds like your mind has been carrying a lot today. You don't have to solve everything right now. Taking this moment for yourself is already a meaningful step.",
 };
 
 export default echoResponses;

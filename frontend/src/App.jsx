@@ -1,49 +1,52 @@
 import { useState } from "react";
-import Header from "./components/common/Header";
-import InfoCard from "./components/common/InfoCard";
 import MoodCheckIn from "./components/mood/MoodCheckIn";
+import HomeScreen from "./components/home/HomeScreen";
+import ContinueConversation from "./components/continue/ContinueConversation";
+import MomentsScreen from "./components/moments/MomentsScreen";
+import JourneyScreen from "./components/journey/JourneyScreen";
+import BreathingScreen from "./components/breathing/BreathingScreen";
 import "./App.css";
+
 function App() {
-  const [started, setStarted] = useState(false);
-  return (
-    <div className="app">
+  const [screen, setScreen] = useState("home");
+console.log(screen);
+return (
+  <div className="app">
+    {screen === "home" && (
+      <HomeScreen
+  onStart={() => setScreen("checkin")}
+  onContinue={() => setScreen("continue")}
+  onMoments={() => setScreen("moments")}
+  onJourney={() => setScreen("journey")}
+  onBreathing={() => setScreen("breathing")}
+/>
+    )}
 
-      <div className="card">
+    {screen === "checkin" && <MoodCheckIn />}
 
-       {!started ? (
-  <>
-    <Header />
-
-    <button
-      className="checkin-btn"
-      onClick={() => setStarted(true)}
-    >
-      🌸 Start Today's Check-In
-    </button>
-  </>
-) : (
-  <MoodCheckIn />
+    {screen === "continue" && (
+  <ContinueConversation
+    onBack={() => setScreen("home")}
+  />
 )}
 
-      </div>
-
-      <InfoCard
-    icon="💜"
-    title="Continue with Echo"
-/>
-
-<InfoCard
-    icon="📝"
-    title="Today's Reflection"
-/>
-
-<InfoCard
-    icon="🔥"
-    title="Your Journey"
-/>
-
-    </div>
-  );
+   {screen === "moments" && (
+  <MomentsScreen
+    onBack={() => setScreen("home")}
+  />
+)}
+{screen === "journey" && (
+  <JourneyScreen
+    onBack={() => setScreen("home")}
+  />
+)}
+{screen === "breathing" && (
+  <BreathingScreen
+    onBack={() => setScreen("home")}
+  />
+)}
+  </div>
+);
 }
 
 export default App;

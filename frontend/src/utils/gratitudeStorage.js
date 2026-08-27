@@ -1,10 +1,10 @@
-export function saveGratitude(entry) {
+export function saveMemory(memory) {
   const existing =
     JSON.parse(localStorage.getItem("gratitudeJar")) || [];
 
   existing.push({
-    text: entry,
-    date: new Date().toLocaleDateString()
+    text: memory,
+    date: new Date().toLocaleDateString(),
   });
 
   localStorage.setItem(
@@ -13,7 +13,7 @@ export function saveGratitude(entry) {
   );
 }
 
-export function getGratitudeJar() {
+export function getMemories() {
   return (
     JSON.parse(localStorage.getItem("gratitudeJar")) || []
   );
