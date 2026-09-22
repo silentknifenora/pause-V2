@@ -17,7 +17,7 @@ function EchoScreen({ mood }) {
     <div className="card">
       <ProgressDots currentStep={2} />
 
-      <h2>🌸 Echo</h2>
+      <h2>Echo</h2>
 
       <p>
         Thank you for checking in today.
