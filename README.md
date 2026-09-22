@@ -62,15 +62,15 @@ Users can:
 
 ## Key Features
 
-- **Mood Check-In** — select how you're feeling in the moment
-- **Echo** — receive a mood-aware reflective response
-- **Continue with Echo** — return to your previous reflection
-- **Moments to Keep** — save meaningful moments for later
-- **Interactive Memory Jar** — randomly rediscover saved memories
-- **Browse by Date** — revisit moments from a specific day
-- **Your Journey** — review previous emotional check-ins
-- **Breathing Pause** — a simple guided inhale/exhale experience
-- **Local Persistence** — reflections and memories remain available between sessions
+- **Mood Check-In** -- select how you're feeling in the moment
+- **Echo** -- receive a mood-aware reflective response
+- **Continue with Echo** -- return to your previous reflection
+- **Moments to Keep** -- save meaningful moments for later
+- **Interactive Memory Jar** -- randomly rediscover saved memories
+- **Browse by Date** -- revisit moments from a specific day
+- **Your Journey** -- review previous emotional check-ins
+- **Breathing Pause** -- a simple guided inhale/exhale experience
+- **Local Persistence** -- reflections and memories remain available between sessions
 
 ---
 
