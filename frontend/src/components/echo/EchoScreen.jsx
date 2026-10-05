@@ -3,13 +3,17 @@ import { useState } from "react";
 import { saveNewSession } from "../../utils/memoryStorage";
 import ProgressDots from "../common/ProgressDots";
 function EchoScreen({ mood }) {
-    const [journalText, setJournalText] = useState("");
-    const [showReflection, setShowReflection] = useState(false);
-    if (showReflection) {
+  const [journalText, setJournalText] = useState("");
+  const [showReflection, setShowReflection] = useState(false);
+  const [echoMessage, setEchoMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+    
+   if (showReflection) {
   return (
     <ReflectionScreen
       mood={mood}
       journal={journalText}
+      echoMessage={echoMessage}
     />
   );
 }
@@ -42,12 +46,46 @@ function EchoScreen({ mood }) {
 
 <button
   className="checkin-btn"
-  onClick={() => {
-    saveNewSession(mood, journalText);
-    setShowReflection(true);
+  disabled={isLoading}
+  onClick={async () => {
+    setIsLoading(true);
+
+    try {
+      const response = await fetch("/api/echo", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          mood,
+          journal: journalText,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Echo could not respond.");
+      }
+
+      saveNewSession(mood, journalText);
+      setEchoMessage(data.response);
+      setShowReflection(true);
+    } catch (error) {
+      console.error("Echo error:", error);
+
+      setEchoMessage(
+        "Thank you for sharing this with me. I'm glad you took a moment to check in with yourself today."
+      );
+
+      saveNewSession(mood, journalText);
+      setShowReflection(true);
+    } finally {
+      setIsLoading(false);
+    }
   }}
 >
-  Share with Echo
+  {isLoading ? "Echo is listening..." : "Share with Echo"}
 </button>
 
 </div>

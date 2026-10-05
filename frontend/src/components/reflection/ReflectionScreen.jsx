@@ -4,7 +4,7 @@ import GratitudeScreen from "../gratitude/GratitudeScreen";
 import echoResponses from "../../data/echoResponses";
 import ProgressDots from "../common/ProgressDots";
 
-function ReflectionScreen({ mood, journal }) {
+function ReflectionScreen({ mood, journal, echoMessage }) {
   const [showMemoryJar, setShowMemoryJar] = useState(false);
 
   const moodEmojis = {
@@ -15,9 +15,6 @@ function ReflectionScreen({ mood, journal }) {
     Anxious: "😰",
   };
 
-  const echoMessage =
-    echoResponses[mood] ||
-    "Thank you for taking a moment to reflect today.";
 
   if (showMemoryJar) {
     return <GratitudeScreen />;
