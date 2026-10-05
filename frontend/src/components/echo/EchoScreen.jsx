@@ -72,15 +72,15 @@ function EchoScreen({ mood }) {
       setEchoMessage(data.response);
       setShowReflection(true);
     } catch (error) {
-      console.error("Echo error:", error);
+  console.error("Echo error:", error);
 
-      setEchoMessage(
-        "Thank you for sharing this with me. I'm glad you took a moment to check in with yourself today."
-      );
+  setEchoMessage(
+    error.message || "Echo could not respond."
+  );
 
-      saveNewSession(mood, journalText);
-      setShowReflection(true);
-    } finally {
+  saveNewSession(mood, journalText);
+  setShowReflection(true);
+  } finally {
       setIsLoading(false);
     }
   }}
