@@ -1,160 +1,416 @@
 # PAUSE V2
 
-> A mindful space to check in, reflect, and remember.
+### An AI-powered reflection companion designed to help people slow down, check in with themselves, and feel heard.
 
-PAUSE is a reflective wellness web app designed to help users slow down, understand how they're feeling, continue past reflections, and revisit meaningful moments over time.
-
-**[View Live Demo](https://pause-v2.vercel.app)**
+[Live Demo](https://pause-v2-focb74p1y-neha-46bf.vercel.app) · [GitHub Repository](https://github.com/silentknifenora/pause-V2)
 
 ---
 
-## The Idea
+## Why I Built This
 
-Many wellness apps emphasize streaks, metrics, and consistency.
+PAUSE started as a wellness concept focused on daily reflection, mood check-ins, and preserving small meaningful moments.
 
-I wanted to explore a different question:
+While working on the first version, I became interested in a deeper question:
 
-**What if a wellness app focused less on performance and more on helping someone feel heard, remembered, and welcomed back?**
+> **Could a simple AI interaction make digital reflection feel more personal without turning the experience into a clinical mental-health tool?**
 
-PAUSE was designed around that idea.
+PAUSE V2 explores that question through **Echo**, an AI reflection companion that responds to what the user actually writes.
 
----
+The goal isn't to replace human support or provide therapy.
 
-## Product Experience
+The goal is much simpler:
 
-### 1. Check in with yourself
-
-Users begin by choosing the emotion that feels closest to how they're feeling.
-
-![Mood Check-In](frontend/public/screenshots/mood-checkin.png)
-
-### 2. Reflect with Echo
-
-Users can write about what's on their mind. Echo responds based on the selected mood and creates a gentle reflection experience.
-
-![Reflection with Echo](frontend/public/screenshots/reflection.png)
-
-### 3. Keep meaningful moments
-
-Instead of presenting saved memories as another list, PAUSE uses an interactive **Memory Jar**.
-
-Users can tap the jar to rediscover a randomly selected moment or browse memories from a specific date.
-
-![Memory Jar](frontend/public/screenshots/memory-jar.png)
+**Help the user feel heard for a moment.**
 
 ---
 
-## Home Experience
+## The Product Problem
 
-The home screen gives returning users several ways to interact with PAUSE without requiring them to complete another check-in.
+Many wellness applications focus on tracking:
 
-![PAUSE Home](frontend/public/screenshots/home.png)
+* Mood
+* Habits
+* Streaks
+* Goals
+* Metrics
 
-Users can:
+Tracking can be useful, but reflection can feel different.
 
-- Start a new check-in
-- Continue a previous conversation with Echo
-- Rediscover saved moments
-- Look back through their emotional journey
-- Take a one-minute breathing pause
+When someone writes about their day, a static prompt or predefined response may not acknowledge what they actually said.
 
----
-
-## Key Features
-
-- **Mood Check-In** -- select how you're feeling in the moment
-- **Echo** -- receive a mood-aware reflective response
-- **Continue with Echo** -- return to your previous reflection
-- **Moments to Keep** -- save meaningful moments for later
-- **Interactive Memory Jar** -- randomly rediscover saved memories
-- **Browse by Date** -- revisit moments from a specific day
-- **Your Journey** -- review previous emotional check-ins
-- **Breathing Pause** -- a simple guided inhale/exhale experience
-- **Local Persistence** -- reflections and memories remain available between sessions
+PAUSE V2 explores whether a lightweight conversational response can make that moment feel more personal.
 
 ---
 
-## Product & UX Decisions
+## Product Hypothesis
 
-### No streak pressure
+> **If Echo responds directly to the user's reflection in a warm, concise, non-clinical way, users may perceive the reflection experience as more personal and supportive than a static response.**
 
-PAUSE intentionally avoids streaks.
+This became the core product hypothesis behind PAUSE V2.
 
-Missing a day shouldn't make someone feel as though they've failed at taking care of themselves. Users can simply return whenever they need the space.
+---
 
-### Memory over metrics
+## User Flow
 
-Instead of focusing only on charts or scores, PAUSE preserves what users actually wrote and allows them to revisit those experiences.
+```text
+         PAUSE
+           │
+           ▼
+     Mood Check-In
+           │
+           ▼
+     Share with Echo
+           │
+           ▼
+     Safety Check
+           │
+           ▼
+       Echo AI
+           │
+           ▼
+       Reflection
+           │
+           ▼
+   "Was Echo helpful?"
+           │
+           ▼
+      Save Memory
+```
 
-### The Memory Jar
+The experience is intentionally short so the AI interaction supports reflection rather than becoming the entire product.
 
-Saved moments originally appeared as a traditional list.
+---
 
-I redesigned the experience around an interactive jar so revisiting a memory feels like rediscovering something rather than browsing another database of entries.
+## Echo — AI Feature
 
-### Breathing as an optional experience
+Echo receives two pieces of context:
 
-Breathing Pause sits outside the required check-in flow. Users can choose it when they want a quiet reset without having to journal or record a mood.
+1. The user's selected mood
+2. The user's written reflection
 
-### Calm, neutral visual system
+The prompt instructs Echo to:
 
-The interface uses a muted sage palette, restrained typography, outline icons, whitespace, and soft cards to create a calm experience without making the design feel overly clinical.
+* Respond to what the user actually shared
+* Reflect a meaningful detail
+* Be warm and concise
+* Avoid diagnosis
+* Avoid medical advice
+* Avoid unsolicited instructions
+* Avoid assuming a crisis
+* Respond in 2–3 sentences
+
+### Example
+
+**User:**
+
+> Nothing special happened today, but I got through everything I needed to do.
+
+**Echo:**
+
+> Even on days that feel completely ordinary, getting through everything you needed to do takes steady effort. There is a quiet accomplishment in simply handling what was on your plate today.
+
+The response acknowledges the user's specific reflection rather than simply repeating their selected mood.
+
+---
+
+## AI Architecture
+
+The AI request is handled through a server-side API endpoint rather than exposing the Gemini API key in the frontend.
+
+```text
+React Frontend
+      │
+      │ POST /api/echo
+      ▼
+Server-side API
+      │
+      ├── Validate input
+      │
+      ├── Basic safety check
+      │
+      ▼
+Gemini API
+      │
+      ▼
+Echo response
+      │
+      ▼
+Reflection screen
+```
+
+### Why this approach?
+
+Keeping the API request server-side prevents the Gemini API key from being exposed directly in the client-side application.
+
+It also provides a place to implement:
+
+* Input validation
+* Safety checks
+* Error handling
+* AI-specific product logic
+
+---
+
+## Safety & Graceful Failure
+
+Because PAUSE is a wellness product, AI failure and safety behavior were treated as product concerns rather than purely technical errors.
+
+### Safety fallback
+
+A lightweight keyword-based check runs before the reflection is sent to Gemini.
+
+Clearly high-risk phrases trigger a predefined safety response instead of being sent to the model.
+
+The current prototype includes guidance toward immediate support, including emergency services and 988 in the U.S.
+
+**Important:** This is a prototype safeguard, not comprehensive crisis detection.
+
+### AI failure fallback
+
+AI services can experience:
+
+* Temporary unavailability
+* Rate limits
+* Quota restrictions
+* Empty responses
+
+Instead of exposing technical errors to the user, PAUSE returns a calm fallback response and allows the reflection flow to continue.
+
+The system retries temporary `503` service errors once, while quota errors such as `429` are not repeatedly retried.
+
+---
+
+## User Feedback Signal
+
+After Echo responds, the user can answer:
+
+**Was Echo helpful?**
+
+* 👍 Yes
+* 👎 Not really
+
+The prototype records:
+
+```text
+Mood
+Feedback
+Echo response
+Timestamp
+```
+
+This creates a simple feedback signal that could later help evaluate whether changes to the AI experience improve perceived usefulness.
+
+---
+
+## Lightweight AI Evaluation
+
+I evaluated five representative reflections covering:
+
+* Ordinary days
+* Accomplishment
+* Calm moments
+* Loneliness
+* Performance anxiety
+
+### What I found
+
+One test produced a successful personalized AI response that directly reflected the user's message.
+
+The remaining tests encountered Gemini availability/quota limitations during evaluation.
+
+This surfaced an important product insight:
+
+> **An AI feature is only useful if the experience remains reliable when the model is unavailable.**
+
+The application was therefore designed to degrade gracefully rather than exposing technical errors to the user.
+
+See the full evaluation:
+
+[`docs/echo-evaluation.md`](docs/echo-evaluation.md)
+
+---
+
+## Product Decisions & Trade-offs
+
+### AI vs. predefined responses
+
+**Decision:** Use generative AI for Echo.
+
+**Why:** Predefined responses are predictable but cannot meaningfully respond to the user's unique reflection.
+
+**Trade-off:** Generative AI introduces variability, cost, latency, and availability dependencies.
+
+---
+
+### Safety vs. simplicity
+
+**Decision:** Use a lightweight server-side keyword safeguard for the prototype.
+
+**Why:** The goal was to introduce a basic safety layer without turning a small portfolio project into a complex safety system.
+
+**Trade-off:** Keyword matching can miss context and produce false positives/negatives.
+
+---
+
+### Reliability vs. AI availability
+
+**Decision:** Provide a graceful fallback when Gemini is unavailable.
+
+**Why:** The reflection experience should not completely break because an external AI service is temporarily unavailable.
+
+**Trade-off:** The fallback is less personalized than a successful Echo response.
+
+---
+
+### Feedback vs. overbuilding analytics
+
+**Decision:** Capture a simple helpful/not-helpful signal.
+
+**Why:** It creates a foundation for measuring user perception without building an unnecessary analytics system.
+
+**Future opportunity:** Aggregate anonymized feedback and compare response quality across different prompt versions.
+
+---
+
+## What I Would Build Next
+
+If PAUSE moved beyond the prototype stage, I would prioritize:
+
+### 1. Better AI evaluation
+
+Test a larger set of reflections and evaluate:
+
+* Relevance
+* Supportiveness
+* Conciseness
+* Unwanted advice
+* User helpfulness
+
+### 2. Stronger safety architecture
+
+Move beyond keyword matching toward a more robust safety strategy with additional review and testing.
+
+### 3. Privacy controls
+
+Define:
+
+* Data retention
+* User consent
+* AI provider data handling
+* Deletion behavior
+* Data minimization
+
+### 4. Product analytics
+
+Track anonymized product signals such as:
+
+* Check-in completion
+* Echo response success rate
+* Helpful vs. not-helpful feedback
+* Return usage
+* Fallback frequency
+
+These metrics would help answer whether Echo is actually improving the product experience.
 
 ---
 
 ## Tech Stack
 
-- React
-- JavaScript
-- Vite
-- CSS
-- LocalStorage
-- Lucide React
-- Git & GitHub
-- Vercel
+### Frontend
+
+* React
+* Vite
+* JavaScript
+* CSS
+* Lucide React
+
+### AI
+
+* Google Gemini API
+* Server-side API integration
+* Prompt-based response generation
+
+### Deployment
+
+* Vercel
+* GitHub
+
+### Storage
+
+* Browser `localStorage` for prototype feedback and reflection-related data
 
 ---
 
-## How It Works
+## Design Direction
 
-PAUSE is currently a frontend MVP.
+PAUSE uses a calm, minimal visual language inspired by:
 
-React manages the interface and screen states, while browser `localStorage` stores reflections, journey entries, and saved moments.
+* Lavender tones
+* Cherry blossoms
+* Soft rounded surfaces
+* Short reflection moments
+* Mobile-first interaction patterns
 
-This allowed me to prototype the complete product experience without requiring authentication or a backend.
+The interface intentionally avoids the visual language of clinical dashboards.
 
----
-
-## What I Learned
-
-Building PAUSE involved more than implementing individual screens. I iterated on the product flow as the application evolved.
-
-Some of the key challenges included:
-
-- Designing continuity between separate user sessions
-- Preventing duplicate journey entries
-- Handling old and new local storage data structures
-- Turning the Memory Jar from a decorative element into an interaction
-- Maintaining a consistent design system across features
-- Building responsive, reusable React components
-- Debugging case-sensitive module imports during production deployment
+The goal is to make reflection feel approachable rather than medical.
 
 ---
 
-## Future Improvements
+## Project Evolution
 
-- AI-powered contextual Echo responses
-- Authentication and cloud synchronization
-- Cross-device persistence
-- Mood trends and reflection insights
-- Accessibility improvements
-- User testing and usability research
-- Analytics instrumentation to understand feature engagement
+PAUSE V2 builds on an earlier wellness application prototype.
+
+The first version focused primarily on:
+
+* Mood check-ins
+* Reflection
+* Habit/streak concepts
+* Memory and gratitude
+
+V2 shifted the focus toward a specific product experiment:
+
+> **Can a small, carefully constrained AI interaction make reflection feel more personal?**
+
+That shift changed the project from simply building features to testing a product hypothesis.
 
 ---
 
-## Status
+## What This Project Demonstrates
 
-**PAUSE V2 is a working MVP deployed on Vercel.**
+PAUSE V2 represents my approach to building AI-enabled products:
 
-The project explores the intersection of product thinking, UX design, emotional wellness, and frontend development.
+**Identify a user problem → form a hypothesis → build a focused experiment → add safety and failure handling → collect feedback → evaluate → iterate.**
+
+Rather than treating AI as a feature added for its own sake, I wanted to explore where it could provide meaningful value while being transparent about its limitations.
+
+---
+
+## Limitations
+
+PAUSE V2 is a portfolio prototype and should not be considered:
+
+* A medical device
+* A therapy application
+* A crisis detection system
+* A replacement for professional mental-health support
+
+The AI responses are generated and may be imperfect or inconsistent.
+
+The safety layer is intentionally limited for this prototype.
+
+---
+
+## Author
+
+**Neha Raut**
+
+MSIS · Product Analytics · UX · AI Product Experiments
+
+Background in VFX and digital production, transitioning into product and data-focused technology roles.
+
+---
+
+## License
+
+This project is intended primarily as a portfolio project and learning experiment.
