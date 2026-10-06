@@ -1,4 +1,3 @@
-
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({
@@ -14,6 +13,32 @@ export default async function handler(req, res) {
         error: "Mood and journal are required.",
       });
     }
+
+    // Mood-specific fallback responses.
+    // These are used only when Gemini is unavailable.
+    const getMoodFallback = (mood) => {
+      const fallbackResponses = {
+        Happy:
+          "It sounds like there was something meaningful to celebrate today. I'm glad you took a moment to notice it.",
+
+        Calm:
+          "It sounds like you found a little space to breathe today. Those quieter moments can be worth holding onto.",
+
+        Okay:
+          "Not every day has to feel extraordinary. Getting through the day is worth acknowledging too.",
+
+        Sad:
+          "It sounds like today felt a little heavy. Thank you for giving yourself a moment to put those feelings into words.",
+
+        Anxious:
+          "It sounds like there's a lot on your mind right now. Thank you for pausing and giving yourself a moment to check in.",
+      };
+
+      return (
+        fallbackResponses[mood] ||
+        "Thank you for taking a moment to check in with yourself today."
+      );
+    };
 
     // Basic safety check before sending the reflection to Gemini.
     const riskTerms = [
@@ -101,8 +126,7 @@ Rules:
       console.error("Gemini API error:", data);
 
       return res.status(200).json({
-        response:
-          "Thank you for sharing this with me. I'm glad you took a moment to check in with yourself today.",
+        response: getMoodFallback(mood),
         fallback: true,
       });
     }
@@ -110,27 +134,27 @@ Rules:
     const text =
       data?.candidates?.[0]?.content?.parts?.[0]?.text;
 
+    // Handle an empty Gemini response.
     if (!text) {
       console.error("Gemini returned an empty response.");
 
       return res.status(200).json({
-        response:
-          "Thank you for sharing this with me. I'm glad you took a moment to check in with yourself today.",
+        response: getMoodFallback(mood),
         fallback: true,
       });
     }
 
+    // Successful AI response.
     return res.status(200).json({
       response: text,
     });
   } catch (error) {
     console.error("Echo API error:", error);
 
+    // Graceful fallback if the API request itself fails.
     return res.status(200).json({
-      response:
-        "Thank you for sharing this with me. I'm glad you took a moment to check in with yourself today.",
+      response: getMoodFallback(mood),
       fallback: true,
     });
   }
 }
-
