@@ -1,3 +1,4 @@
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({
@@ -38,12 +39,8 @@ export default async function handler(req, res) {
       });
     }
 
-    // Retry temporary Gemini 503 errors up to 3 times.
-    let response;
-    let data;
-
-    for (let attempt = 1; attempt <= 3; attempt++) {
-      response = await fetch(
+    const createGeminiRequest = () =>
+      fetch(
         "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent",
         {
           method: "POST",
@@ -83,33 +80,39 @@ Rules:
         }
       );
 
-      data = await response.json();
+    // First attempt.
+    let response = await createGeminiRequest();
+    let data = await response.json();
 
-      if (response.ok) {
-        break;
-      }
+    // Retry only once for a temporary 503 service-unavailable error.
+    if (response.status === 503) {
+      console.warn("Gemini temporarily unavailable. Retrying once...");
 
-      console.error(`Gemini attempt ${attempt} failed:`, data);
-
-      // Only retry temporary service-unavailable errors.
-      if (response.status !== 503 || attempt === 3) {
-        return res.status(200).json({
-          response:
-            "Thank you for sharing this with me. I'm glad you took a moment to check in with yourself today.",
-          fallback: true,
-        });
-      }
-
-      // Wait 1 second after attempt 1, then 2 seconds after attempt 2.
       await new Promise((resolve) =>
-        setTimeout(resolve, attempt * 1000)
+        setTimeout(resolve, 1500)
       );
+
+      response = await createGeminiRequest();
+      data = await response.json();
+    }
+
+    // Handle API failures without exposing technical errors to the user.
+    if (!response.ok) {
+      console.error("Gemini API error:", data);
+
+      return res.status(200).json({
+        response:
+          "Thank you for sharing this with me. I'm glad you took a moment to check in with yourself today.",
+        fallback: true,
+      });
     }
 
     const text =
       data?.candidates?.[0]?.content?.parts?.[0]?.text;
 
     if (!text) {
+      console.error("Gemini returned an empty response.");
+
       return res.status(200).json({
         response:
           "Thank you for sharing this with me. I'm glad you took a moment to check in with yourself today.",
