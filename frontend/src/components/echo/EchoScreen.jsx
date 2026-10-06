@@ -75,8 +75,8 @@ function EchoScreen({ mood }) {
   console.error("Echo error:", error);
 
   setEchoMessage(
-    error.message || "Echo could not respond."
-  );
+  "Thank you for sharing this with me. I'm glad you took a moment to check in with yourself today."
+);
 
   saveNewSession(mood, journalText);
   setShowReflection(true);
