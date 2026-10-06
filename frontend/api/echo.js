@@ -79,14 +79,14 @@ Rules:
     const data = await response.json();
 
     if (!response.ok) {
-      console.error("Gemini API error:", data);
+  console.error("Gemini API error:", data);
 
-      return res.status(500).json({
-        error:
-          data?.error?.message ||
-          "Unable to generate an Echo response.",
-      });
-    }
+  return res.status(200).json({
+    response:
+      "Thank you for sharing this with me. I'm glad you took a moment to check in with yourself today.",
+    fallback: true,
+  });
+}
 
     const text =
       data?.candidates?.[0]?.content?.parts?.[0]?.text;
@@ -103,8 +103,10 @@ Rules:
   } catch (error) {
     console.error("Echo API error:", error);
 
-    return res.status(500).json({
-      error: error?.message || "Something went wrong.",
-    });
+    return res.status(200).json({
+  response:
+    "Thank you for sharing this with me. I'm glad you took a moment to check in with yourself today.",
+  fallback: true,
+});
   }
 }
