@@ -6,6 +6,7 @@ import ProgressDots from "../common/ProgressDots";
 
 function ReflectionScreen({ mood, journal, echoMessage }) {
   const [showMemoryJar, setShowMemoryJar] = useState(false);
+  const [echoFeedback, setEchoFeedback] = useState(null);
 
   const moodEmojis = {
     Happy: "😊",
@@ -54,6 +55,51 @@ function ReflectionScreen({ mood, journal, echoMessage }) {
         <h3>Echo</h3>
         <p>{echoMessage}</p>
       </div>
+      {echoMessage && (
+  <div className="echo-feedback">
+    <p>Did this feel helpful?</p>
+
+    <button
+      type="button"
+      onClick={() => {
+        setEchoFeedback("positive");
+        localStorage.setItem(
+          "echoFeedback",
+          JSON.stringify({
+            mood,
+            feedback: "positive",
+            date: new Date().toISOString(),
+          })
+        );
+      }}
+    >
+      👍 Yes
+    </button>
+
+    <button
+      type="button"
+      onClick={() => {
+        setEchoFeedback("negative");
+        localStorage.setItem(
+          "echoFeedback",
+          JSON.stringify({
+            mood,
+            feedback: "negative",
+            date: new Date().toISOString(),
+          })
+        );
+      }}
+    >
+      👎 Not really
+    </button>
+
+    {echoFeedback && (
+      <p>
+        Thanks for the feedback.
+      </p>
+    )}
+  </div>
+)}
 
       <button
         className="checkin-btn"
