@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { NotebookPen } from "lucide-react";
 import GratitudeScreen from "../gratitude/GratitudeScreen";
-import echoResponses from "../../data/echoResponses";
 import ProgressDots from "../common/ProgressDots";
 
 function ReflectionScreen({ mood, journal, echoMessage }) {
@@ -16,6 +15,19 @@ function ReflectionScreen({ mood, journal, echoMessage }) {
     Anxious: "😰",
   };
 
+  const handleFeedback = (feedback) => {
+    setEchoFeedback(feedback);
+
+    localStorage.setItem(
+      "echoFeedback",
+      JSON.stringify({
+        mood,
+        feedback,
+        echoResponse: echoMessage,
+        date: new Date().toISOString(),
+      })
+    );
+  };
 
   if (showMemoryJar) {
     return <GratitudeScreen />;
@@ -24,6 +36,7 @@ function ReflectionScreen({ mood, journal, echoMessage }) {
   return (
     <div className="card">
       <ProgressDots currentStep={3} />
+
       <h2
         style={{
           display: "flex",
@@ -55,51 +68,56 @@ function ReflectionScreen({ mood, journal, echoMessage }) {
         <h3>Echo</h3>
         <p>{echoMessage}</p>
       </div>
+
       {echoMessage && (
-  <div className="echo-feedback">
-    <p>Did this feel helpful?</p>
+        <div className="echo-feedback">
+          {!echoFeedback ? (
+            <>
+              <p>Was Echo helpful?</p>
 
-    <button
-      type="button"
-      onClick={() => {
-        setEchoFeedback("positive");
-        localStorage.setItem(
-          "echoFeedback",
-          JSON.stringify({
-            mood,
-            feedback: "positive",
-            date: new Date().toISOString(),
-          })
-        );
-      }}
-    >
-      👍 Yes
-    </button>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  justifyContent: "center",
+                }}
+              >
+                <button
+                  type="button"
+                  onClick={() => handleFeedback("positive")}
+                  style={{
+                    padding: "10px 18px",
+                    borderRadius: "12px",
+                    border: "1px solid #ddd8ec",
+                    background: "#faf9fd",
+                    cursor: "pointer",
+                  }}
+                >
+                  👍 Yes
+                </button>
 
-    <button
-      type="button"
-      onClick={() => {
-        setEchoFeedback("negative");
-        localStorage.setItem(
-          "echoFeedback",
-          JSON.stringify({
-            mood,
-            feedback: "negative",
-            date: new Date().toISOString(),
-          })
-        );
-      }}
-    >
-      👎 Not really
-    </button>
-
-    {echoFeedback && (
-      <p>
-        Thanks for the feedback.
-      </p>
-    )}
-  </div>
-)}
+                <button
+                  type="button"
+                  onClick={() => handleFeedback("negative")}
+                  style={{
+                    padding: "10px 18px",
+                    borderRadius: "12px",
+                    border: "1px solid #ddd8ec",
+                    background: "#faf9fd",
+                    cursor: "pointer",
+                  }}
+                >
+                  👎 Not really
+                </button>
+              </div>
+            </>
+          ) : (
+            <p>
+              Thanks for the feedback
+            </p>
+          )}
+        </div>
+      )}
 
       <button
         className="checkin-btn"
