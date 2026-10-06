@@ -13,6 +13,28 @@ export default async function handler(req, res) {
         error: "Mood and journal are required.",
       });
     }
+    const riskTerms = [
+  "suicide",
+  "kill myself",
+  "end my life",
+  "hurt myself",
+  "self harm",
+  "self-harm",
+];
+
+const lowerJournal = journal.toLowerCase();
+
+const hasHighRiskLanguage = riskTerms.some((term) =>
+  lowerJournal.includes(term)
+);
+
+if (hasHighRiskLanguage) {
+  return res.status(200).json({
+    response:
+      "I'm really glad you shared this instead of keeping it to yourself. If you may be in immediate danger, please contact local emergency services. In the U.S., you can also call or text 988 for immediate crisis support.",
+    safetyFallback: true,
+  });
+}
 
     const response = await fetch(
       "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent",
